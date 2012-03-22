@@ -58,6 +58,7 @@ public class ClientCommand {
         view.addPlayerListPanel();
     }
     private void playerList(String [] str) {
+        view.getPlayerListPanel().getListModel().removeAllElements();
         for (int i = 1; i < str.length; ) {
             model.getPlayerList().add(new Player(str[i], Integer.parseInt(str[i + 1])));
             i += 2;
@@ -92,6 +93,8 @@ public class ClientCommand {
         JOptionPane.showMessageDialog(null,"Player [" + str[1] + "] reject you invite!");
     }
     private void acceptGame(String [] str) {
+        view.removePlayerListPanel();
+        view.addCheckersPanel();
         /*data.getMenuPanel().setVisible(false);
         data.getCheckersFrame("").pack();
         int chip = Integer.parseInt(str[1]);
@@ -103,6 +106,6 @@ public class ClientCommand {
         }
         data.startBoard();
         */
-        System.out.println("start game");
+        //System.out.println("start game");
     }
 }

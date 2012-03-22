@@ -24,10 +24,10 @@ public class PlayerListPanel extends JPanel {
     public DefaultListModel getListModel() {
         return listModel;
     }
-    /*public JList getList() {
+    public JList getList() {
         return list;
     }
-    public JScrollPane getScroll() {
+    /*public JScrollPane getScroll() {
         return scroll;
     }*/
     public void addPlayerListSelectionListener(ListSelectionListener lsl) {

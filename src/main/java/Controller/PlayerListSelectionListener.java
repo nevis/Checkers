@@ -16,6 +16,7 @@ public class PlayerListSelectionListener implements ListSelectionListener {
     }
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        
+        int opponentIndex = view.getPlayerListPanel().getList().getSelectedIndex();
+        model.setOpponent(opponentIndex);
     }
 }

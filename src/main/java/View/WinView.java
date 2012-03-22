@@ -9,19 +9,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class WinView extends JFrame implements WindowListener {
-    private AuthorizationPanel authorizationPanel = new AuthorizationPanel();
-    private PlayerListPanel playerListPanel = new PlayerListPanel();
-    private Model model = null;
-    public WinView(Model model) {
-        this.model = model;
-        setTitle("Authorization");
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addWindowListener(this);
-        addAuthorizationPanel();
-        setResizable(false);
-        setVisible(true);
-    }
     public static void main (String [] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -31,6 +18,25 @@ public class WinView extends JFrame implements WindowListener {
                 WinController controller = new WinController(view, model);
             }
         });
+    }
+
+    private AuthorizationPanel authorizationPanel;
+    private PlayerListPanel playerListPanel;
+    private CheckersPanel checkersPanel;
+    private Model model;
+
+    public WinView(Model model) {
+        this.model = model;
+        authorizationPanel = new AuthorizationPanel();
+        playerListPanel = new PlayerListPanel();
+        checkersPanel = new CheckersPanel(this.model);
+        setTitle("Authorization");
+        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(this);
+        addAuthorizationPanel();
+        setResizable(false);
+        setVisible(true);
     }
     public void addAuthorizationPanel() {
         add(authorizationPanel);
@@ -54,6 +60,17 @@ public class WinView extends JFrame implements WindowListener {
     public PlayerListPanel getPlayerListPanel() {
         return playerListPanel;
     }
+    public void addCheckersPanel() {
+        add(checkersPanel);
+        pack();
+        frameDisplayCenter();
+    }
+    public void removeCheckersPanel() {
+        remove(checkersPanel);
+    }
+    public CheckersPanel getCheckersPanel() {
+        return checkersPanel;
+    }
     private void frameDisplayCenter() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int locationX = (screenSize.width - getWidth()) / 2;
@@ -66,7 +83,6 @@ public class WinView extends JFrame implements WindowListener {
         if (model.getClient().isConnected()) {
             model.getClient().sendMessage("@exit;");
         }
-        System.out.println("close window");
     }
     @Override
     public void windowClosed(WindowEvent e) {}
