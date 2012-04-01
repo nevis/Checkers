@@ -6,20 +6,18 @@ import java.net.Socket;
 
 public class Client {
     private int port = 5869;
-    private String serverName = "localhost";
     private PrintWriter output;
     private BufferedReader input;
     private Socket socket;
     private boolean connected = false;
     private String name = null;
     
-    public Client() throws IOException {
+    public Client(String serverName) throws IOException {
         InetAddress ia = InetAddress.getByName(serverName);
         socket = new Socket(ia, port);
         output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
-
     public void sendMessage(String message) {
         output.println(message);
     }

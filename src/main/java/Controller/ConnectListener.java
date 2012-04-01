@@ -1,10 +1,11 @@
 package Controller;
 
-import Model.Model;
-import View.WinView;
+import Model.*;
+import View.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class ConnectListener implements ActionListener {
     private WinView view = null;
@@ -18,6 +19,7 @@ public class ConnectListener implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
+        model.setClient(view.getAuthorizationPanel().getServerName());
         model.getClient().setName(view.getAuthorizationPanel().getClientName());
         tryConnect();
     }

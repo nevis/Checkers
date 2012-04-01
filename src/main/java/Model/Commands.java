@@ -9,7 +9,11 @@ public class Commands {
         Invite("@invite"),
         NoFindPlayer("@nofind"),
         AcceptGame("@accept"),
-        RejectInvite("@rejectinvite");
+        RejectInvite("@rejectinvite"),
+        Turn("@turn"),
+        Kill("@kill"),
+        Lose("@lose"),
+        Win("@win");
 
         private String command;
         Command(String command) {
@@ -28,6 +32,10 @@ public class Commands {
         else if (s.equals(Command.NoFindPlayer.getCommand())) return Command.NoFindPlayer;
         else if (s.equals(Command.AcceptGame.getCommand())) return Command.AcceptGame;
         else if (s.equals(Command.RejectInvite.getCommand())) return Command.RejectInvite;
+        else if (s.equals(Command.Turn.getCommand())) return Command.Turn;
+        else if (s.equals(Command.Kill.getCommand())) return Command.Kill;
+        else if (s.equals(Command.Lose.getCommand())) return Command.Lose;
+        else if (s.equals(Command.Win.getCommand())) return Command.Win;
         else throw new AssertionError("Unknown command: " + s);
     }
 }

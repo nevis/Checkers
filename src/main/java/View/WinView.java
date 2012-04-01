@@ -80,7 +80,7 @@ public class WinView extends JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        if (model.getClient().isConnected()) {
+        if ((model.getClient() != null) && model.getClient().isConnected()) {
             model.getClient().sendMessage("@exit;");
         }
     }

@@ -2,20 +2,27 @@ package Controller;
 
 import View.CheckersCell;
 import View.WinView;
+import Model.Model;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class CheckersPanelListener implements MouseListener {
     private WinView view;
-    CheckersPanelListener(WinView view) {
-        this.view = view;        
+    private Model model;
+    CheckersPanelListener(WinView view, Model model) {
+        this.view = view;
+        this.model = model;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        CheckersCell cc = (CheckersCell) view.getCheckersPanel().getComponentAt(e.getPoint());
-        System.out.println(cc.getName());
+        if (model.getCheckers().getTurn()) {
+            CheckersCell cc = (CheckersCell) view.getCheckersPanel().getComponentAt(e.getPoint());
+            model.getCheckers().clientTurn(cc.getRow(), cc.getColumn());
+            view.getCheckersPanel().repaint();
+        }
+
     }
     @Override
     public void mouseReleased(MouseEvent e) {}

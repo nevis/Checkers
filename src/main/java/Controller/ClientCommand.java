@@ -5,6 +5,7 @@ import Model.Player;
 import View.WinView;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class ClientCommand {
     private  Model model = null;
@@ -49,7 +50,48 @@ public class ClientCommand {
                 reject(str);
                 break;
             }
+            case Turn: {
+                turn(str);
+                break;
+            }
+            case Kill: {
+                kill(str);
+                break;
+            }
+            case Lose: {
+                JOptionPane.showMessageDialog(null, "You lose!");
+                view.removeCheckersPanel();
+                view.setTitle(model.getClient().getName());
+               // view.getPlayerListPanel().getListModel().removeAllElements();
+                
+                view.addPlayerListPanel();
+                break;
+            }
+            case Win: {
+                JOptionPane.showMessageDialog(null, "You win!");
+                view.removeCheckersPanel();
+                view.setTitle(model.getClient().getName());
+                //view.getPlayerListPanel().getListModel().removeAllElements();
+                view.addPlayerListPanel();
+                break;
+            }
         }
+    }
+    private void kill(String [] str) {
+        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[1]), Integer.parseInt(str[2]), 0);
+        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[3]), Integer.parseInt(str[4]),
+                model.getCheckers().getEnemyChip());
+        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[1]) + Integer.parseInt(str[5]),
+                Integer.parseInt(str[2]) + Integer.parseInt(str[6]), 0);
+        view.getCheckersPanel().repaint();
+        model.getCheckers().setTurn(true);
+    }
+    private void turn(String [] str) {
+        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[1]), Integer.parseInt(str[2]), 0);
+        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[3]), Integer.parseInt(str[4]),
+                model.getCheckers().getEnemyChip());
+        view.getCheckersPanel().repaint();
+        model.getCheckers().setTurn(true);
     }
     private void connected() {
         model.getClient().setConnected(true);
@@ -59,6 +101,7 @@ public class ClientCommand {
     }
     private void playerList(String [] str) {
         view.getPlayerListPanel().getListModel().removeAllElements();
+        model.getPlayerList().removeAll(model.getPlayerList());
         for (int i = 1; i < str.length; ) {
             model.getPlayerList().add(new Player(str[i], Integer.parseInt(str[i + 1])));
             i += 2;
@@ -95,17 +138,15 @@ public class ClientCommand {
     private void acceptGame(String [] str) {
         view.removePlayerListPanel();
         view.addCheckersPanel();
-        /*data.getMenuPanel().setVisible(false);
-        data.getCheckersFrame("").pack();
-        int chip = Integer.parseInt(str[1]);
-        if (chip == 1) {
-            data.setChip(chip);
-            data.setTurn(true);
-        } else if (chip == 2) {
-            data.setChip(chip);
+        model.getCheckers().setChip(Integer.parseInt(str[1]));
+        model.getCheckers().refreshCheckersBoard();
+        if (model.getCheckers().getChip() == 1) {
+            view.setTitle(view.getTitle() + ": WHITE");
+            model.getCheckers().setTurn(true);
         }
-        data.startBoard();
-        */
-        //System.out.println("start game");
+        else {
+            view.setTitle(view.getTitle() + ": BLACK");
+            model.getCheckers().setTurn(false);
+        }
     }
 }

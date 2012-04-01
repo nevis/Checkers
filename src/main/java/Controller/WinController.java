@@ -14,7 +14,7 @@ public class WinController {
         view.getAuthorizationPanel().addExitListener(new ExitListener(view));
         view.getPlayerListPanel().addInviteListener(new InviteListener(model));
         view.getPlayerListPanel().addPlayerListSelectionListener(new PlayerListSelectionListener(view, model));
-        view.getCheckersPanel().addCheckersListener(new CheckersPanelListener(view));
+        view.getCheckersPanel().addCheckersListener(new CheckersPanelListener(view, model));
     }
 
 }
