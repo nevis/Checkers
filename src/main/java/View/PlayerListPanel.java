@@ -27,9 +27,6 @@ public class PlayerListPanel extends JPanel {
     public JList getList() {
         return list;
     }
-    /*public JScrollPane getScroll() {
-        return scroll;
-    }*/
     public void addPlayerListSelectionListener(ListSelectionListener lsl) {
         list.addListSelectionListener(lsl);
     }

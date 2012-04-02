@@ -152,7 +152,6 @@ public class Checkers {
                 }
             }
         }
-        //System.out.println(kill);
         return kill;
     }
     private boolean isHaveToKill(int row, int column, int enemyLoc, int clientLoc) {

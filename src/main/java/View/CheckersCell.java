@@ -16,7 +16,6 @@ public class CheckersCell extends JPanel {
         this.row = row;
         this.column = column;
         this.model = model;
-        //setName(row + "" + column);
         setPreferredSize(new Dimension(size, size));
         setBorder(null);
         if ((row + column) % 2 == 0) {
