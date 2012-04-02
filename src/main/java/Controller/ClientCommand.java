@@ -5,7 +5,6 @@ import Model.Player;
 import View.WinView;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 public class ClientCommand {
     private  Model model = null;
@@ -60,38 +59,50 @@ public class ClientCommand {
             }
             case Lose: {
                 JOptionPane.showMessageDialog(null, "You lose!");
-                view.removeCheckersPanel();
-                view.setTitle(model.getClient().getName());
-               // view.getPlayerListPanel().getListModel().removeAllElements();
-                
-                view.addPlayerListPanel();
+                showPlayerListPanel();
                 break;
             }
             case Win: {
                 JOptionPane.showMessageDialog(null, "You win!");
-                view.removeCheckersPanel();
-                view.setTitle(model.getClient().getName());
-                //view.getPlayerListPanel().getListModel().removeAllElements();
-                view.addPlayerListPanel();
+                showPlayerListPanel();
                 break;
+            }
+            case EnemyOff: {
+                JOptionPane.showMessageDialog(null, "Enemy left game!");
+                showPlayerListPanel();
             }
         }
     }
     private void kill(String [] str) {
-        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[1]), Integer.parseInt(str[2]), 0);
-        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[3]), Integer.parseInt(str[4]),
-                model.getCheckers().getEnemyChip());
-        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[1]) + Integer.parseInt(str[5]),
-                Integer.parseInt(str[2]) + Integer.parseInt(str[6]), 0);
+        model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[1])),
+                reverse(Integer.parseInt(str[2])), 0);
+        model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[3])),
+                reverse(Integer.parseInt(str[4])),  model.getCheckers().getEnemyChip());
+        model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[1]) + Integer.parseInt(str[5])),
+                reverse(Integer.parseInt(str[2]) + Integer.parseInt(str[6])), 0);
         view.getCheckersPanel().repaint();
         model.getCheckers().setTurn(true);
     }
     private void turn(String [] str) {
-        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[1]), Integer.parseInt(str[2]), 0);
-        model.getCheckers().setCheckersBoardValue(Integer.parseInt(str[3]), Integer.parseInt(str[4]),
-                model.getCheckers().getEnemyChip());
+        model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[1])),
+                reverse(Integer.parseInt(str[2])), 0);
+        model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[3])),
+                reverse(Integer.parseInt(str[4])), model.getCheckers().getEnemyChip());
         view.getCheckersPanel().repaint();
         model.getCheckers().setTurn(true);
+    }
+    private int reverse(int number) {
+        switch (number) {
+            case 0: return 7;
+            case 1: return 6;
+            case 2: return 5;
+            case 3: return 4;
+            case 4: return 3;
+            case 5: return 2;
+            case 6: return 1;
+            case 7: return 0;
+            default: return -1;
+        }
     }
     private void connected() {
         model.getClient().setConnected(true);
@@ -116,9 +127,8 @@ public class ClientCommand {
         view.getPlayerListPanel().getListModel().addElement(p.getName());
     }
     private void removePlayer(String [] str) {
-        Player p = new Player(str[1], Integer.parseInt(str[2]));
-        model.getPlayerList().remove(p);
-        view.getPlayerListPanel().getListModel().removeElement(p.getName());
+        model.removeFromPlayerListByHashCode(Integer.parseInt(str[2]));
+        view.getPlayerListPanel().getListModel().removeElement(str[1]);
     }
     private void invite(String [] str) {
         int answer = JOptionPane.showConfirmDialog(null, "Player [" + str[1] +
@@ -131,11 +141,14 @@ public class ClientCommand {
     }
     private void noFind(String [] str) {
         JOptionPane.showMessageDialog(null,"Player [" + str[1] + "] no find!");
+        view.getPlayerListPanel().getInvite().setEnabled(true);
     }
     private void reject(String [] str) {
         JOptionPane.showMessageDialog(null,"Player [" + str[1] + "] reject you invite!");
+        view.getPlayerListPanel().getInvite().setEnabled(true);
     }
     private void acceptGame(String [] str) {
+        view.getPlayerListPanel().getInvite().setEnabled(true);
         view.removePlayerListPanel();
         view.addCheckersPanel();
         model.getCheckers().setChip(Integer.parseInt(str[1]));
@@ -148,5 +161,10 @@ public class ClientCommand {
             view.setTitle(view.getTitle() + ": BLACK");
             model.getCheckers().setTurn(false);
         }
+    }
+    private void showPlayerListPanel() {
+        view.removeCheckersPanel();
+        view.setTitle(model.getClient().getName());
+        view.addPlayerListPanel();
     }
 }

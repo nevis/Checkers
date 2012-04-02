@@ -13,7 +13,8 @@ public class Commands {
         Turn("@turn"),
         Kill("@kill"),
         Lose("@lose"),
-        Win("@win");
+        Win("@win"),
+        EnemyOff("@enemyOff");
 
         private String command;
         Command(String command) {
@@ -36,6 +37,7 @@ public class Commands {
         else if (s.equals(Command.Kill.getCommand())) return Command.Kill;
         else if (s.equals(Command.Lose.getCommand())) return Command.Lose;
         else if (s.equals(Command.Win.getCommand())) return Command.Win;
+        else if (s.equals(Command.EnemyOff.getCommand())) return Command.EnemyOff;
         else throw new AssertionError("Unknown command: " + s);
     }
 }

@@ -36,4 +36,7 @@ public class PlayerListPanel extends JPanel {
     public void addInviteListener(ActionListener al) {
         invite.addActionListener(al);
     }
+    public JButton getInvite() {
+        return invite;
+    }
 }
