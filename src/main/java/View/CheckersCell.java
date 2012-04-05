@@ -40,13 +40,13 @@ public class CheckersCell extends JPanel {
             g2d.fill(figure);
             g2d.dispose();
         } else if (model.getCheckers().getCheckersBoardValueAt(row, column) == 11) {
-            figure = new Ellipse2D.Double(10, 10, size - 21, size - 21);
+            figure = new Ellipse2D.Double(15, 15, size - 31, size - 31);
             g2d.setColor(Color.white);
             g2d.draw(figure);
             g2d.fill(figure);
             g2d.dispose();
         } else if (model.getCheckers().getCheckersBoardValueAt(row, column) == 21) {
-            figure = new Ellipse2D.Double(10, 10, size - 21, size - 21);
+            figure = new Ellipse2D.Double(15, 15, size - 31, size - 31);
             g2d.setColor(Color.black);
             g2d.draw(figure);
             g2d.fill(figure);

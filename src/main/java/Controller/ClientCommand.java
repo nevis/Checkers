@@ -17,6 +17,10 @@ public class ClientCommand {
         String [] str = in.split("\\;");
         String command = str[0];
         switch (model.getCommands().getClientCommand(command)) {
+            case Error: {
+                JOptionPane.showMessageDialog(null, "Connection error!");
+                break;
+            }
             case Connected: {
                 connected();
                 break;
@@ -77,17 +81,17 @@ public class ClientCommand {
         model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[1])),
                 reverse(Integer.parseInt(str[2])), 0);
         model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[3])),
-                reverse(Integer.parseInt(str[4])),  model.getCheckers().getEnemyChip());
+                reverse(Integer.parseInt(str[4])),  Integer.parseInt(str[8]));
         model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[1]) + Integer.parseInt(str[5])),
                 reverse(Integer.parseInt(str[2]) + Integer.parseInt(str[6])), 0);
         view.getCheckersPanel().repaint();
-        model.getCheckers().setTurn(true);
+        if (str[7].equals("end")) model.getCheckers().setTurn(true);
     }
     private void turn(String [] str) {
         model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[1])),
                 reverse(Integer.parseInt(str[2])), 0);
         model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[3])),
-                reverse(Integer.parseInt(str[4])), model.getCheckers().getEnemyChip());
+                reverse(Integer.parseInt(str[4])), Integer.parseInt(str[5]));
         view.getCheckersPanel().repaint();
         model.getCheckers().setTurn(true);
     }

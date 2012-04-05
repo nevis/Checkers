@@ -9,12 +9,11 @@ public class Checkers {
     private boolean firstTurn = false;
     private Model model;
     private int killRow, killColumn;
-    
+    private boolean noMulti = true;
     
     public Checkers(Model model) {
        this.model = model;
     }
-
     public void refreshCheckersBoard() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -52,40 +51,56 @@ public class Checkers {
     public int getChip() {
         return chip;
     }
-    public int getEnemyChip() {
-        return enemyChip;
-    }
     public void setTurn(boolean turn) {
         this.turn = turn;
     }
     public boolean getTurn() {
         return turn;
     }
+    
     public void clientTurn(int row, int column) {
         if (!firstTurn) {
             firstTurn = isSelected(row, column);
         } else {
-            if ((!checkToKill()) && (secondTurn(row, column))) {
-                if (row == 7) checkersField[row][column] = chip*10 + 1;
-                else checkersField[row][column] = chip;
-                checkersField[firstRow][firstColumn] = 0;
-                firstTurn = false;
+            if (noMulti && (!checkToKillAll()) && (turn(row, column))) {
+                setChips(row, column);
                 model.getClient().sendMessage("@turn;" + firstRow + ";" + firstColumn + ";"
-                        + row + ";" + column + ";");
-
+                        + row + ";" + column + ";" + checkersField[row][column] + ";");
+                firstTurn = false;
                 turn = false;
-            } else if (killTurn(row, column)) {
-                if (row == 7) checkersField[row][column] = chip*10 + 1;
-                else checkersField[row][column] = chip;
-                checkersField[firstRow][firstColumn] = 0;
+            } else if (killTurn(row, column)){
+                if (checkersField[firstRow][firstColumn] == chip) {
+                    row = firstRow + 2 * killRow;
+                    column = firstColumn + 2 * killColumn;
+                }
+                setChips(row, column);
                 checkersField[firstRow + killRow][firstColumn + killColumn] = 0;
-                model.getClient().sendMessage("@kill;" + firstRow + ";" + firstColumn + ";"
-                        + row + ";" + column + ";" + killRow + ";" + killColumn + ";" );
-                turn = false;
-            } else {
+                if (checkToKill(row, column)) {
+                    model.getClient().sendMessage("@kill;" + firstRow + ";" + firstColumn + ";"
+                            + row + ";" + column + ";" + killRow + ";" + killColumn + ";" + "noend;"
+                            + checkersField[row][column] + ";");
+                    noMulti = false;
+                    firstRow = row;
+                    firstColumn = column;
+                    turn = true;
+                } else {
+                    model.getClient().sendMessage("@kill;" + firstRow + ";" + firstColumn + ";"
+                            + row + ";" + column + ";" + killRow + ";" + killColumn + ";" + "end;"
+                            + checkersField[row][column] + ";");
+                    noMulti = true;
+                    firstTurn = false;
+                    turn = false;
+                }
+            }  else if (noMulti) {
                 if (!isSelected(row, column)) firstTurn = false;
             }
         }
+    }
+    private void setChips(int row, int column) {
+        if ((row == 0) && (checkersField[firstRow][firstColumn] == chip)) checkersField[row][column] = chip*10 + 1;
+        else if (checkersField[firstRow][firstColumn] == chip) checkersField[row][column] = chip;
+        else if (checkersField[firstRow][firstColumn] == chip*10 + 1) checkersField[row][column] = chip*10 + 1;
+        checkersField[firstRow][firstColumn] = 0;
     }
     private boolean isSelected(int row, int column) {
         if ((checkersField[row][column] == chip) || (checkersField[row][column] == chip*10 + 1)) {
@@ -95,99 +110,182 @@ public class Checkers {
         } else
             return false;
     }
-    private boolean secondTurn(int row, int column) {
-        if ((checkersField[firstRow][firstColumn] == 1) || (checkersField[firstRow][firstColumn] == 2)) {
-            if ((row - firstRow == -1) && (column - firstColumn == -1) && (checkersField[row][column] == 0))
-                return true;
-            else if ((row - firstRow == -1) && (column - firstColumn == 1) && (checkersField[row][column] == 0))
-                return true;
-            else
-                return false;
-        } else if ((checkersField[firstRow][firstColumn] == 11) || (checkersField[firstRow][firstColumn] == 21)){
-            if ((Math.abs(row - firstRow ) == Math.abs(column - firstColumn)) && (checkersField[row][column] == 0))
-                return true;
-            else
-                return false;
-        } else
-            return false;
+    private boolean turn(int row, int column) {
+        boolean turn = false;
+        if (checkersField[firstRow][firstColumn] == chip) {
+              turn = simpleTurn(row, column);
+        } else if ((checkersField[firstRow][firstColumn] == chip*10 + 1) && (checkersField[row][column] == 0) && 
+                (Math.abs(row - firstRow) == Math.abs(column - firstColumn))){
+                turn = multiTurn(row, column);
+            }
+        return turn;
     }
-    
+    private boolean simpleTurn(int row, int column) {
+        if ((row - firstRow == -1) && (column - firstColumn == -1) && (checkersField[row][column] == 0))
+            return true;
+        else if ((row - firstRow == -1) && (column - firstColumn == 1) && (checkersField[row][column] == 0))
+            return true;
+        else
+            return false; 
+    }
+    private boolean multiTurn(int row, int column) {
+        boolean turn = false;
+        if (row - firstRow < 0 && column - firstColumn < 0) {
+            if (getLeftUpChipNumber(row, column, Math.abs(row - firstRow)) == 0) turn = true;
+        } else if (row - firstRow > 0 && column - firstColumn < 0) {
+            if (getLeftDownChipNumber(row, column, Math.abs(row - firstRow)) == 0) turn = true;
+        } else if (row - firstRow < 0 && column - firstColumn > 0) {
+            if (getRightUpChipNumber(row, column, Math.abs(row - firstRow)) == 0) turn = true;
+        } else if (row - firstRow > 0 && column - firstColumn > 0) {
+            if (getRightDownChipNumber(row, column, Math.abs(row - firstRow)) == 0) turn = true;
+        }
+        return turn;
+    }
     private boolean killTurn(int row, int column) {
         boolean kill = false;
-        if (Math.abs(row - firstRow) == Math.abs(column - firstColumn)) {
-            int clientLoc = Math.abs(row - firstRow);
-            if ((firstRow - clientLoc >= 0) && (firstColumn - clientLoc >= 0) &&
-                    isLeftUpKill(firstRow, firstColumn, 1, clientLoc)) {
-                killRow = -1;
-                killColumn = -1;
-                kill = true;
-            } else if ((firstRow + clientLoc <= 7) && (firstColumn - clientLoc >= 0) &&
-                    isLeftDownKill(firstRow, firstColumn, 1, clientLoc)) {
-                killRow = 1;
-                killColumn = -1;
-                kill = true;
-            } else if ((firstRow - clientLoc >= 0) && (firstColumn + clientLoc <= 7) &&
-                    isRightUpKill(firstRow, firstColumn, 1, clientLoc)) {
-                killRow = -1;
-                killColumn = 1;
-                kill = true;
-            } else if ((firstRow + clientLoc <= 7) && (firstColumn + clientLoc <= 7) &&
-                    isRightDownKill(firstRow, firstColumn, 1, clientLoc)) {
-                killRow = 1;
-                killColumn = 1;
-                kill = true;
+        int clientLoc = Math.abs(row - firstRow);
+        if (checkersField[firstRow][firstColumn] == chip) clientLoc = 2;
+        if (clientLoc == Math.abs(column - firstColumn)) {
+            for (int i = 1; i < clientLoc; i++) {
+                if (isLeftUpKill(firstRow, firstColumn, i, clientLoc)) {
+                    killRow = -i;
+                    killColumn = -i;
+                    kill = true;
+                    break;
+                } else if (isLeftDownKill(firstRow, firstColumn, i, clientLoc)) {
+                    killRow = i;
+                    killColumn = -i;
+                    kill = true;
+                    break;
+                } else if (isRightUpKill(firstRow, firstColumn, i, clientLoc)) {
+                    killRow = -i;
+                    killColumn = i;
+                    kill = true;
+                    break;
+                } else if (isRightDownKill(firstRow, firstColumn, i, clientLoc)) {
+                    killRow = i;
+                    killColumn = i;
+                    kill = true;
+                    break;
+                }
             }
         }
         return kill;
     }
-    private boolean checkToKill() {
+    private boolean checkToKillAll() {
         boolean kill = false;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (checkersField[i][j] == chip) {
-                      if (isHaveToKill(i, j, 1, 2)) {
-                          kill = true;
-                          break;
-                      }
+                if (checkToKill(i, j)) {
+                    kill = true;
+                    break;
+                }
+            }
+            if (kill) break;
+        }
+        return kill;
+    }
+    private boolean checkToKill(int row, int column) {
+        boolean kill = false;
+        if (checkersField[row][column] == chip) { //simple chip
+            if (isHaveToKill(row, column, 1, 2)) {
+                kill = true;
+            }
+        } else if (checkersField[row][column] == chip*10 + 1) { //super chip
+            for (int ii = 1; ii < 8; ii++) {
+                if (isHaveToKill(row, column, ii, ii+1)) {
+                    kill = true;
                 }
             }
         }
         return kill;
     }
     private boolean isHaveToKill(int row, int column, int enemyLoc, int clientLoc) {
-        if ((row - clientLoc >= 0) && (column - clientLoc >= 0) &&
-                isLeftUpKill(row, column, enemyLoc, clientLoc)) {
+        if (isLeftUpKill(row, column, enemyLoc, clientLoc)) {
             return true;
-        } else if ((row + clientLoc <= 7) && (column - clientLoc >= 0) &&
-                isLeftDownKill(row, column, enemyLoc, clientLoc)) {
+        } else if (isLeftDownKill(row, column, enemyLoc, clientLoc)) {
             return true;
-        } else if ((row - clientLoc >= 0) && (column + clientLoc <= 7) &&
-                isRightUpKill(row, column, enemyLoc, clientLoc)) {
+        } else if (isRightUpKill(row, column, enemyLoc, clientLoc)) {
             return true;
-        } else if ((row + clientLoc <= 7) && (column + clientLoc <= 7) &&
-                isRightDownKill(row, column, enemyLoc, clientLoc)) {
+        } else if (isRightDownKill(row, column, enemyLoc, clientLoc)) {
             return true;
         } else
             return false;
     }
     private boolean isLeftUpKill(int row, int column, int enemyLoc, int clientLoc) {
-        if ((checkersField[row - enemyLoc][column - enemyLoc] == enemyChip) &&
-                (checkersField[row - clientLoc][column - clientLoc] == 0)) return true;
+        int kol = 0;
+        if ((row - clientLoc >= 0) && (column - clientLoc >= 0) &&
+                (checkersField[row - clientLoc][column - clientLoc] == 0) &&
+                ((checkersField[row - enemyLoc][column - enemyLoc] == enemyChip) ||
+                        (checkersField[row - enemyLoc][column - enemyLoc] == enemyChip*10 + 1))) {
+            kol = getLeftUpChipNumber(row, column, clientLoc);
+        }
+        if (kol == 1) return true;
         else return false;
+    }
+    private int getLeftUpChipNumber(int row, int column, int clientLoc) {
+        int number = 0;
+        for (int i = 1; i < clientLoc; i++) {
+            if (checkersField[row-i][column-i] == enemyChip ||
+                    checkersField[row-i][column-i] == enemyChip*10+1) number += 1;
+        }
+        return number;
     }
     private boolean isLeftDownKill(int row, int column, int enemyLoc, int clientLoc) {
-        if ((checkersField[row + enemyLoc][column - enemyLoc] == enemyChip) &&
-                (checkersField[row + clientLoc][column - clientLoc] == 0)) return true;
+        int kol = 0;
+        if ((row + clientLoc <= 7) && (column - clientLoc >= 0) &&
+                (checkersField[row + clientLoc][column - clientLoc] == 0) &&
+                ((checkersField[row + enemyLoc][column - enemyLoc] == enemyChip) ||
+                        (checkersField[row + enemyLoc][column - enemyLoc] == enemyChip*10 + 1))) {
+                kol = getLeftDownChipNumber(row, column, clientLoc);
+        }
+        if (kol == 1) return true;
         else return false;
+    }
+    private int getLeftDownChipNumber(int row, int column, int clientLoc) {
+        int number = 0;
+        for (int i = 1; i < clientLoc; i++) {
+            if (checkersField[row+i][column-i] == enemyChip ||
+                    checkersField[row+i][column-i] == enemyChip*10+1) number += 1;
+        }
+        return number;
     }
     private boolean isRightUpKill(int row, int column, int enemyLoc, int clientLoc) {
-        if ((checkersField[row - enemyLoc][column + enemyLoc] == enemyChip) &&
-                (checkersField[row - clientLoc][column + clientLoc] == 0)) return true;
+        int kol = 0;
+        if ((row - clientLoc >= 0) && (column + clientLoc <= 7) &&
+                (checkersField[row - clientLoc][column + clientLoc] == 0) &&
+                ((checkersField[row - enemyLoc][column + enemyLoc] == enemyChip) ||
+                        (checkersField[row - enemyLoc][column + enemyLoc] == enemyChip*10 + 1))) {
+            kol = getRightUpChipNumber(row, column, clientLoc);
+        }
+        if (kol == 1) return true;
         else return false;
     }
+    private int getRightUpChipNumber(int row, int column, int clientLoc) {
+        int number = 0;
+        for (int i = 1; i < clientLoc; i++) {
+            if (checkersField[row-i][column+i] == enemyChip ||
+                    checkersField[row-i][column+i] == enemyChip*10+1) number += 1;
+        }
+        return number;
+    }
     private boolean isRightDownKill(int row, int column, int enemyLoc, int clientLoc) {
-        if ((checkersField[row + enemyLoc][column + enemyLoc] == enemyChip) &&
-                (checkersField[row + clientLoc][column + clientLoc] == 0)) return true;
+        int kol = 0;
+        if ((row + clientLoc <= 7) && (column + clientLoc <= 7) &&
+                (checkersField[row + clientLoc][column + clientLoc] == 0) &&
+                ((checkersField[row + enemyLoc][column + enemyLoc] == enemyChip) ||
+                        (checkersField[row + enemyLoc][column + enemyLoc] == enemyChip*10 + 1))) {
+        kol = getRightDownChipNumber(row, column, clientLoc);
+        }
+        if (kol == 1) return true;
         else return false;
+    }
+    private int getRightDownChipNumber(int row, int column, int clientLoc) {
+        int number = 0;
+        for (int i = 1; i < clientLoc; i++) {
+            if (checkersField[row+i][column+i] == enemyChip ||
+                    checkersField[row+i][column+i] == enemyChip*10+1) number += 1;
+        }
+        return number;
     }
 }

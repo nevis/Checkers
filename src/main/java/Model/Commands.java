@@ -2,6 +2,7 @@ package Model;
 
 public class Commands {
     public enum Command {
+        Error("@error"),
         Connected("@connected"),
         PlayerList("@playerlist"),
         AddPlayer("@addplayer"),
@@ -38,6 +39,7 @@ public class Commands {
         else if (s.equals(Command.Lose.getCommand())) return Command.Lose;
         else if (s.equals(Command.Win.getCommand())) return Command.Win;
         else if (s.equals(Command.EnemyOff.getCommand())) return Command.EnemyOff;
+        else if (s.equals(Command.Error.getCommand())) return Command.Error;
         else throw new AssertionError("Unknown command: " + s);
     }
 }

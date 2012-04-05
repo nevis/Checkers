@@ -5,17 +5,16 @@ import View.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class ConnectListener implements ActionListener {
     private WinView view = null;
     private Model model = null;
     private ClientCommand clientCommand;
     
-    ConnectListener(WinView view, Model model) {
+    ConnectListener(WinView view, Model model, ClientCommand clientCommand) {
         this.view = view;
         this.model = model;
-        clientCommand = new ClientCommand(this.view, this.model);
+        this.clientCommand = clientCommand;
     }
     @Override
     public void actionPerformed(ActionEvent e) {

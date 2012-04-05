@@ -1,9 +1,8 @@
-package Controller;
+package Model;
 
 
-import Model.Model;
+import Controller.ClientCommand;
 
-import javax.swing.*;
 import java.io.IOException;
 
 public class ClientThread extends Thread {
@@ -26,7 +25,7 @@ public class ClientThread extends Thread {
                 }
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Connection error!");
+            clientCommand.run("@error;" + "Connection error!");
         }
     }
 }
