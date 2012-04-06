@@ -227,7 +227,9 @@ public class Checkers {
         int number = 0;
         for (int i = 1; i < clientLoc; i++) {
             if (checkersField[row-i][column-i] == enemyChip ||
-                    checkersField[row-i][column-i] == enemyChip*10+1) number += 1;
+                    checkersField[row-i][column-i] == enemyChip*10+1 ||
+                    checkersField[row-i][column-i] == chip ||
+                    checkersField[row-i][column-i] == chip*10+1) number += 1;
         }
         return number;
     }
@@ -246,7 +248,9 @@ public class Checkers {
         int number = 0;
         for (int i = 1; i < clientLoc; i++) {
             if (checkersField[row+i][column-i] == enemyChip ||
-                    checkersField[row+i][column-i] == enemyChip*10+1) number += 1;
+                    checkersField[row+i][column-i] == enemyChip*10+1 ||
+                    checkersField[row+i][column-i] == chip ||
+                    checkersField[row+i][column-i] == chip*10+1) number += 1;
         }
         return number;
     }
@@ -265,7 +269,9 @@ public class Checkers {
         int number = 0;
         for (int i = 1; i < clientLoc; i++) {
             if (checkersField[row-i][column+i] == enemyChip ||
-                    checkersField[row-i][column+i] == enemyChip*10+1) number += 1;
+                    checkersField[row-i][column+i] == enemyChip*10+1 ||
+                    checkersField[row-i][column+i] == chip ||
+                    checkersField[row-i][column+i] == chip*10+1) number += 1;
         }
         return number;
     }
@@ -284,7 +290,9 @@ public class Checkers {
         int number = 0;
         for (int i = 1; i < clientLoc; i++) {
             if (checkersField[row+i][column+i] == enemyChip ||
-                    checkersField[row+i][column+i] == enemyChip*10+1) number += 1;
+                    checkersField[row+i][column+i] == enemyChip*10+1 ||
+                    checkersField[row+i][column+i] == chip ||
+                    checkersField[row+i][column+i] == chip*10+1 ) number += 1;
         }
         return number;
     }

@@ -14,7 +14,6 @@ public class CheckersPanelListener implements MouseListener {
         this.view = view;
         this.model = model;
     }
-
     @Override
     public void mousePressed(MouseEvent e) {
         if (model.getCheckers().getTurn()) {
@@ -22,7 +21,6 @@ public class CheckersPanelListener implements MouseListener {
             model.getCheckers().clientTurn(cc.getRow(), cc.getColumn());
             view.getCheckersPanel().repaint();
         }
-
     }
     @Override
     public void mouseReleased(MouseEvent e) {}
