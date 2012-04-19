@@ -5,9 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Model {
-    public static final Color DARK = new Color(222, 184, 135);
-    public static final Color LIGHT = new Color(139, 69, 19);
-    public static final int CHECKERS_CELL_SIZE = 60;
+    public static final Image white1 = Toolkit.getDefaultToolkit().getImage("source/white1.jpg");
+    public static final Image white2 = Toolkit.getDefaultToolkit().getImage("source/white2.jpg");
+    public static final Image whiteCell = Toolkit.getDefaultToolkit().getImage("source/whitecell.jpg");
+    public static final Image black1 = Toolkit.getDefaultToolkit().getImage("source/black1.jpg");
+    public static final Image black2 = Toolkit.getDefaultToolkit().getImage("source/black2.jpg");
+    public static final Image blackCell   = Toolkit.getDefaultToolkit().getImage("source/blackcell.jpg");
+    public static final int CHECKERS_CELL_SIZE = 63;
     private Client client;
     private Commands commands = new Commands();
     private ArrayList<Player> playerList = new ArrayList<Player>();
@@ -17,12 +21,8 @@ public class Model {
     public Client getClient() {
         return client;
     }
-    public void setClient(String serverName) {
-        try {
-            client = new Client(serverName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setClient(String serverName, String name) throws IOException {
+         client = new Client(serverName, name);
     }
     public Commands getCommands() {
         return commands;

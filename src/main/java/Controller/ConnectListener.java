@@ -5,6 +5,8 @@ import View.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOError;
+import java.io.IOException;
 
 public class ConnectListener implements ActionListener {
     private WinView view = null;
@@ -18,12 +20,12 @@ public class ConnectListener implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        model.setClient(view.getAuthorizationPanel().getServerName());
-        model.getClient().setName(view.getAuthorizationPanel().getClientName());
-        tryConnect();
-    }
-    public void tryConnect() {
-        model.getClient().sendMessage("@connect;" + model.getClient().getName() + ";");
-        new ClientThread(clientCommand, model);
+        try {
+            model.setClient(view.getAuthorizationPanel().getServerName(), view.getAuthorizationPanel().getClientName());
+            model.getClient().sendMessage("@connect;" + model.getClient().getName() + ";");
+            new ClientThread(clientCommand, model);
+        } catch (IOException ex) {
+            clientCommand.run("@error;" + "Connection error!");
+        }
     }
 }

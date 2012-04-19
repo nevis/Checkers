@@ -131,13 +131,13 @@ public class Checkers {
     private boolean multiTurn(int row, int column) {
         boolean turn = false;
         if (row - firstRow < 0 && column - firstColumn < 0) {
-            if (getLeftUpChipNumber(row, column, Math.abs(row - firstRow)) == 0) turn = true;
+            if (getLeftUpChipNumber(firstRow, firstColumn, Math.abs(row - firstRow)) == 0) turn = true;
         } else if (row - firstRow > 0 && column - firstColumn < 0) {
-            if (getLeftDownChipNumber(row, column, Math.abs(row - firstRow)) == 0) turn = true;
+            if (getLeftDownChipNumber(firstRow, firstColumn, Math.abs(row - firstRow)) == 0) turn = true;
         } else if (row - firstRow < 0 && column - firstColumn > 0) {
-            if (getRightUpChipNumber(row, column, Math.abs(row - firstRow)) == 0) turn = true;
+            if (getRightUpChipNumber(firstRow, firstColumn, Math.abs(row - firstRow)) == 0) turn = true;
         } else if (row - firstRow > 0 && column - firstColumn > 0) {
-            if (getRightDownChipNumber(row, column, Math.abs(row - firstRow)) == 0) turn = true;
+            if (getRightDownChipNumber(firstRow, firstColumn, Math.abs(row - firstRow)) == 0) turn = true;
         }
         return turn;
     }

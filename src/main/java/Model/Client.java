@@ -12,8 +12,9 @@ public class Client {
     private boolean connected = false;
     private String name = null;
     
-    public Client(String serverName) throws IOException {
+    public Client(String serverName, String name) throws IOException {
         InetAddress ia = InetAddress.getByName(serverName);
+        this.name = name;
         socket = new Socket(ia, port);
         output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -29,9 +30,6 @@ public class Client {
     }
     public void setConnected(boolean conn) {
         connected = conn;
-    }
-    public void setName(String name) {
-        this.name = name;
     }
     public String getName() {
         return name;
