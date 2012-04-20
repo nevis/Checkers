@@ -1,6 +1,6 @@
 package View;
 
-import Model.Model;
+import Model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,7 @@ import java.awt.*;
 public class CheckersCell extends JPanel {
     private int row, column;
     private Model model;
-    private int size= model.CHECKERS_CELL_SIZE;
+    private int size = Constant.CHECKERS_CELL_SIZE;
 
     public CheckersCell(int row, int column, Model model) {
         this.row = row;
@@ -22,22 +22,22 @@ public class CheckersCell extends JPanel {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
         if (model.getCheckers().getCheckersBoardValueAt(row, column) == 1) {
-            g2d.drawImage(model.white1, 0, 0, this);
+            g2d.drawImage(Constant.white1, 0, 0, this);
             g2d.finalize();
         } else if (model.getCheckers().getCheckersBoardValueAt(row, column) == 2) {
-            g2d.drawImage(model.black1, 0, 0, this);
+            g2d.drawImage(Constant.black1, 0, 0, this);
             g2d.finalize();
         } else if (model.getCheckers().getCheckersBoardValueAt(row, column) == 11) {
-            g2d.drawImage(model.white2, 0, 0, this);
+            g2d.drawImage(Constant.white2, 0, 0, this);
             g2d.finalize();
         } else if (model.getCheckers().getCheckersBoardValueAt(row, column) == 21) {
-            g2d.drawImage(model.black2, 0, 0, this);
+            g2d.drawImage(Constant.black2, 0, 0, this);
             g2d.finalize();
         } else if (model.getCheckers().getCheckersBoardValueAt(row, column) == 0) {
-            g2d.drawImage(model.blackCell, 0, 0, this);
+            g2d.drawImage(Constant.blackCell, 0, 0, this);
             g2d.finalize();
         } else if (model.getCheckers().getCheckersBoardValueAt(row, column) == -1) {
-            g2d.drawImage(model.whiteCell, 0, 0, this);
+            g2d.drawImage(Constant.whiteCell, 0, 0, this);
             g2d.finalize();
         }
     }

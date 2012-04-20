@@ -15,7 +15,7 @@ public class WinView extends JFrame implements WindowListener {
             public void run() {
                 Model model = new Model();
                 WinView view = new WinView(model);
-                WinController controller = new WinController(view, model);
+                new WinController(view, model);
             }
         });
     }
@@ -23,6 +23,7 @@ public class WinView extends JFrame implements WindowListener {
     private AuthorizationPanel authorizationPanel;
     private PlayerListPanel playerListPanel;
     private CheckersPanel checkersPanel;
+    private InfoPanel infoPanel;
     private Model model;
 
     public WinView(Model model) {
@@ -30,16 +31,18 @@ public class WinView extends JFrame implements WindowListener {
         authorizationPanel = new AuthorizationPanel();
         playerListPanel = new PlayerListPanel();
         checkersPanel = new CheckersPanel(this.model);
+        infoPanel = new InfoPanel();
         setTitle("Authorization");
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        //setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWindowListener(this);
         addAuthorizationPanel();
-        setResizable(false);
+        //setResizable(false);
         setVisible(true);
     }
     public void addAuthorizationPanel() {
-        add(authorizationPanel);
+        add(authorizationPanel, BorderLayout.CENTER);
         pack();
         frameDisplayCenter();
     }
@@ -50,7 +53,7 @@ public class WinView extends JFrame implements WindowListener {
         return authorizationPanel;
     }
     public void addPlayerListPanel() {
-        add(playerListPanel);
+        add(playerListPanel, BorderLayout.CENTER);
         pack();
         frameDisplayCenter();
     }
@@ -61,15 +64,20 @@ public class WinView extends JFrame implements WindowListener {
         return playerListPanel;
     }
     public void addCheckersPanel() {
-        add(checkersPanel);
+        add(checkersPanel, BorderLayout.CENTER);
+        add(infoPanel, BorderLayout.NORTH);
         pack();
         frameDisplayCenter();
     }
     public void removeCheckersPanel() {
         remove(checkersPanel);
+        remove(infoPanel);
     }
     public CheckersPanel getCheckersPanel() {
         return checkersPanel;
+    }
+    public InfoPanel getInfoPanel() {
+        return infoPanel;
     }
     private void frameDisplayCenter() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

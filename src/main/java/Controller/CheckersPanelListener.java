@@ -20,6 +20,7 @@ public class CheckersPanelListener implements MouseListener {
             CheckersCell cc = (CheckersCell) view.getCheckersPanel().getComponentAt(e.getPoint());
             model.getCheckers().clientTurn(cc.getRow(), cc.getColumn());
             view.getCheckersPanel().repaint();
+            if (!model.getCheckers().getTurn()) view.getInfoPanel().setInfo("Enemy turn");
         }
     }
     @Override

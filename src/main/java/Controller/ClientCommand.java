@@ -1,7 +1,6 @@
 package Controller;
 
-import Model.Model;
-import Model.Player;
+import Model.*;
 import View.WinView;
 
 import javax.swing.*;
@@ -85,7 +84,10 @@ public class ClientCommand {
         model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[1]) + Integer.parseInt(str[5])),
                 reverse(Integer.parseInt(str[2]) + Integer.parseInt(str[6])), 0);
         view.getCheckersPanel().repaint();
-        if (str[7].equals("end")) model.getCheckers().setTurn(true);
+        if (str[7].equals("end")) {
+            model.getCheckers().setTurn(true);
+            view.getInfoPanel().setInfo(Constant.YOU_TURN);
+        }
     }
     private void turn(String [] str) {
         model.getCheckers().setCheckersBoardValue(reverse(Integer.parseInt(str[1])),
@@ -94,6 +96,7 @@ public class ClientCommand {
                 reverse(Integer.parseInt(str[4])), Integer.parseInt(str[5]));
         view.getCheckersPanel().repaint();
         model.getCheckers().setTurn(true);
+        view.getInfoPanel().setInfo(Constant.YOU_TURN);
     }
     private int reverse(int number) {
         switch (number) {
@@ -158,17 +161,16 @@ public class ClientCommand {
         model.getCheckers().setChip(Integer.parseInt(str[1]));
         model.getCheckers().refreshCheckersBoard();
         if (model.getCheckers().getChip() == 1) {
-            view.setTitle(view.getTitle() + ": WHITE");
             model.getCheckers().setTurn(true);
+            view.getInfoPanel().setInfo(Constant.YOU_TURN);
         }
         else {
-            view.setTitle(view.getTitle() + ": BLACK");
             model.getCheckers().setTurn(false);
+            view.getInfoPanel().setInfo(Constant.ENEMY_TURN);
         }
     }
     private void showPlayerListPanel() {
         view.removeCheckersPanel();
-        view.setTitle(model.getClient().getName());
         view.addPlayerListPanel();
     }
 }

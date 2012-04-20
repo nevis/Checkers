@@ -5,7 +5,6 @@ import View.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOError;
 import java.io.IOException;
 
 public class ConnectListener implements ActionListener {

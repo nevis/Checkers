@@ -14,8 +14,8 @@ public class PlayerListPanel extends JPanel {
     PlayerListPanel() {
         int width = 160;
         int height = 300;
-        setPreferredSize(new Dimension(width + 20, height + 50));
-        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        setPreferredSize(new Dimension(width + 30, height + 90));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         scroll.setPreferredSize(new Dimension(width, height));
         add(scroll);

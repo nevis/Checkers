@@ -14,8 +14,8 @@ public class CheckersPanel extends JPanel {
         createGameField();
     }
     private void createGameField() {
-        for (int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
+        for (int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
                 add(new CheckersCell(i, j, model));
             }
         }
