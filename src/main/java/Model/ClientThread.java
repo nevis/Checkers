@@ -1,12 +1,10 @@
 package Model;
 
-
 import Controller.ClientCommand;
 
 import java.io.IOException;
 
 public class ClientThread extends Thread {
-    private String serverAnswer = null;
     private ClientCommand clientCommand;
     private Model model;
     
@@ -17,6 +15,7 @@ public class ClientThread extends Thread {
     }
     @Override
     public void run() {
+        String serverAnswer;
         try {
             while (true) {
                 if ((serverAnswer = model.getClient().getInput().readLine()) != null) {

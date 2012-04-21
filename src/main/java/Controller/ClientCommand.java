@@ -21,7 +21,7 @@ public class ClientCommand {
                 break;
             }
             case Connected: {
-                connected();
+                connected(str);
                 break;
             }
             case PlayerList: {
@@ -111,11 +111,12 @@ public class ClientCommand {
             default: return -1;
         }
     }
-    private void connected() {
+    private void connected(String [] str) {
         model.getClient().setConnected(true);
         view.removeAuthorizationPanel();
+        view.createChooseGamePanel(str);
         view.setTitle(model.getClient().getName());
-        view.addPlayerListPanel();
+        view.addChooseGamePanel();
     }
     private void playerList(String [] str) {
         view.getPlayerListPanel().getListModel().removeAllElements();

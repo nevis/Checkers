@@ -21,6 +21,7 @@ public class WinView extends JFrame implements WindowListener {
     }
 
     private AuthorizationPanel authorizationPanel;
+    private ChooseGamePanel chooseGamePanel;
     private PlayerListPanel playerListPanel;
     private CheckersPanel checkersPanel;
     private InfoPanel infoPanel;
@@ -33,12 +34,11 @@ public class WinView extends JFrame implements WindowListener {
         checkersPanel = new CheckersPanel(this.model);
         infoPanel = new InfoPanel();
         setTitle("Authorization");
-        //setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWindowListener(this);
         addAuthorizationPanel();
-        //setResizable(false);
+        setResizable(false);
         setVisible(true);
     }
     public void addAuthorizationPanel() {
@@ -51,6 +51,20 @@ public class WinView extends JFrame implements WindowListener {
     }
     public AuthorizationPanel getAuthorizationPanel() {
         return authorizationPanel;
+    }
+    public void createChooseGamePanel(String [] str) {
+        chooseGamePanel = new ChooseGamePanel(str, model, this);
+    }
+    public void addChooseGamePanel() {
+        add(chooseGamePanel, BorderLayout.CENTER);
+        pack();
+        frameDisplayCenter();
+    }
+    public void removeChooseGamePanel() {
+        remove(chooseGamePanel);
+    }
+    public ChooseGamePanel getChooseGamePanel() {
+        return chooseGamePanel;
     }
     public void addPlayerListPanel() {
         add(playerListPanel, BorderLayout.CENTER);

@@ -5,17 +5,15 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class Client {
-    private int port = 5869;
     private PrintWriter output;
     private BufferedReader input;
-    private Socket socket;
     private boolean connected = false;
     private String name = null;
     
     public Client(String serverName, String name) throws IOException {
         InetAddress ia = InetAddress.getByName(serverName);
         this.name = name;
-        socket = new Socket(ia, port);
+        Socket socket = new Socket(ia, 5869);
         output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
